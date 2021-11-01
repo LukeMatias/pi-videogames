@@ -1,43 +1,58 @@
 import React from "react";
-// import { connect } from "react-redux";
 import { Switch, Route } from "react-router";
+// import { getGameById } from "./redux/actions";
+import { useSelector } from "react-redux";
 import "./App.css";
-import Landing from "./components/landing/landing";
-import Nav from "./components/nav/nav";
+import Landing from "./components/Landing/Landing";
+import Nav from "./components/Nav/Nav";
 import CreateGame from "./components/create_game/createGame";
-import Videogames from "./components/videogames/videogames";
+import Videogames from "./components/Videogames/Videogames";
 import GameDetail from "./components/game_detail/gameDetail";
 import Footer from "./components/footer/footer";
-// import { Nav } from "./components/Nav/Nav";
-// import TodoDetail from "./components/TodoDetail/TodoDetail";
 
 export function App() {
+  // const games = useSelector((state) => state.games);
+  const gameId = useSelector((state) => state.detailGame);
+  // const dispatch = useDispatch();
+  // useEffect(()=>
+  // dispatch(getGameById()),[]
+  // )
   return (
     <div className="App">
-      <Route path="/" render={() => <Nav />} />
+    <Nav/>
       <Switch>
         <Route exact path="/" render={() => <Landing />} />
+        {/* <Route path="/" render={() => <Nav />} /> */}
         <Route exact path="/videogames" render={() => <Videogames />} />
         <Route exact path="/videogames/create" render={() => <CreateGame />} />
+        <Route
+          exact
+          path="/videogames?name=name"
+          render={() => <Videogames />}
+        />
         <Route
           path="/videogames/:id"
           render={({ match }) => {
             console.log(match);
-            // const todo = todos.find((t) => t.id === parseInt(match.params.id));
-            return <GameDetail />;
+            const id =
+              match.params.id.split("-").length > 2
+                ? match.params.id
+                : parseInt(match.params.id);
+            console.log(id);
+            // gameIdDetail(id);
+            // const game =
+            //   match.params.id.split("-").length > 2
+            //     ? games.find((g) => g.id === match.params.id)
+            //     : (gameIdDetail(parseInt(match.params.id)), gameId);
+            // console.log(game);
+            return <GameDetail game={gameId} />;
           }}
         />
+
       </Switch>
-      <Route path="/" render={() => <Footer />} />
+      <Footer />    
     </div>
   );
 }
 
-// const mapStateToProps = (state) => {
-//   return {
-//     todos: state,
-//   };
-// };
-
-// export default connect(mapStateToProps)(App);
 export default App;

@@ -1,0 +1,24 @@
+.main-landing {
+    height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  scroll-behavior: unset;
+}
+
+img {
+  height: 65vmin;
+  pointer-events: none;
+  /* flex-flow: column nowrap;
+   */
+}
+
+
+/* a{
+    border-radius: .5em;
+    margin-top: 2em;
+    padding: 1em 2em;
+    width: 50%;
+} */
+

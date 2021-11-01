@@ -1,6 +1,5 @@
 const { Router } = require("express");
 const router = Router();
-// im gonna work with models
 const {  Genres } = require("../db");
 
 router.get("/", async (req, res) => {
