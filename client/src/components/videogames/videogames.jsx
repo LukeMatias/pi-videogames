@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-// import { connect } from "react-redux";
 import { useDispatch, useSelector } from "react-redux";
 import { getGames, getGenres } from "../../redux/actions";
 import Loader from "../Loader/Loader";
 import Cards from "../Cards/Cards";
 
+// https://www.youtube.com/watch?v=IYCa1F-OWmk
 export function Videogames() {
   const style = {
     border: "1px solid black",
@@ -19,20 +19,20 @@ export function Videogames() {
   // } else {
 
   // }
+  // useEffect( async () => {
+    
+  // await Fn  } ()        , []); // eslint-disable-line
   useEffect(() => {
-    let isCancelled = false;
-    if (!isCancelled) {
-      setTimeout(
-        dispatch(getGames(videogame)),
-        2000
-
-      );
+    // SI GAMES.LENGTH
+    if (!games.length) {
+      console.log("Dentro del IF");
+      dispatch(getGames(videogame));
+      dispatch(getGenres());
     }
-    return () => {
-      isCancelled = true;
-    };
-  }, [dispatch, videogame]);
-  useEffect(() => dispatch(getGenres()), [dispatch]);
+    // console.log("Fuera del IF")
+    console.log(games);
+    // return () => {};
+  }, []); // eslint-disable-line
 
   function handleChange(event) {
     setVideogame(event.target.value);
@@ -59,7 +59,8 @@ export function Videogames() {
           />
           <button onClick={(e) => handleSubmit(e)}>Search</button>
         </form>
-        {!Object.keys(games).length ? <Loader /> : <Cards games={games} />}
+        {/* {!Object.keys(games).length ? <Loader /> : <Cards games={games} />} */}
+        <Cards games={games} />
       </main>
     </>
   );

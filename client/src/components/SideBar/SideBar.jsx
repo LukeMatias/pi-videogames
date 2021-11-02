@@ -6,7 +6,7 @@ const SideNav = ({ show, setShow }) => {
   return (
     <AsideBar show={show}>
       <Menu>
-        <Link to="/" exact={true} onClick={() => setShow(!show)}>
+        <Link to="/"  onClick={() => setShow(!show)}>
           Inicio
         </Link>
 

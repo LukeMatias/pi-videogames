@@ -22,7 +22,7 @@ router.get("/", async (req, res) => {
   try {
     // DEBERÍA SACAR LOS AWAIT YA QUE ESTA EL PROMISE ALL ????
     // const games_api = name ? await getGamesByName(name) : await getGames();
-    // const games_api = await getGames(name);
+    const games_api = await getGames(name);
 
     const games_db = name ? await getGamesDb(condition) : await getGamesDb();
     // const games_db = name ? getGamesDb(condition) : getGamesDb();
@@ -58,6 +58,7 @@ router.get("/:id", async (req, res) => {
   let { id } = req.params;
 
   const game =
+  // REEMPLAZAR POR .INCLUDES() ??
     id.split("-").length > 2
       ? await Videogames.findByPk(id)
       : await getGamesById(id);

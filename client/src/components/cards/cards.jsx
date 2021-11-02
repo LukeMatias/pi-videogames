@@ -8,8 +8,8 @@ export default function Cards({games}) {
     <CardsLayout   >
       {/* <h1> Soy el container cards</h1> */}
        {
-        games?.map((game,i) =>{
-          return  <Card game={game} key={game[i]} />
+        games?.map((game) =>{
+          return  <Card game={game} key={game.id} />
         })
       }   
     </CardsLayout>

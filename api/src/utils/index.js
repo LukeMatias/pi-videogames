@@ -2,27 +2,13 @@ const axios = require("axios");
 const { Videogames, Genres } = require("../db");
 const { API_KEY } = process.env;
 
-// End Points
 
-async function getApiData(api) {
-  try {
-    const dataApi = await axios.get(api);
-    const results = dataApi.data.results;
-    return results;
-  } catch (error) {
-    console.log(error.message);
-  }
-  // const genresApi = await axios.get(genres_api);
-  // const resultsGenres = genresApi.data.results;
-
-  // const gamesAndGenres = await Promise.all([resultsGames , resultsGenres])
-}
-
+// https://api.rawg.io/api/games?key=XXXXXXXXXXXXXXXXX&page_size=100
 function arrayApis(name) {
   let page = 1;
   let arr_apis = [];
   while (page <= 3) {
-    console.log("entro al while")
+    // console.log("entro al while");
     if (!name) {
       const games_api =
         page > 1
@@ -32,26 +18,38 @@ function arrayApis(name) {
       ++page;
     } else {
       const games_api_names =
+      // api con mismo name pero diferente pag
         page > 1
           ? `https://api.rawg.io/api/games?key=${API_KEY}&page=${page}&search=${name}+`
           : `https://api.rawg.io/api/games?search=${name}&key=${API_KEY}&page_size=40`;
-      console.log("entro al else");
+      // console.log("entro al else");
       arr_apis.push(games_api_names);
       ++page;
     }
   }
-  console.log("EL NAME",name)
+  console.log("EL NAME", name);
   console.log("LENGTH DESDE ARR APIS", arr_apis);
   return arr_apis;
 }
 
+async function getApiData(api) {
+  try {
+    const dataApi = await axios.get(api);
+    const results = dataApi.data.results;
+    return results;
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
 async function getGames(name) {
   const apis = arrayApis(name);
-  let allGames=[];
+  let allGames = [];
 
   for (let i = 0; i < apis.length; i++) {
     try {
       const data = await getApiData(apis[i]);
+      // ABSTRAER EL MAP EN UNA SOLA FUNCT??
       const games = data.map((game) => {
         return {
           id: game.id,

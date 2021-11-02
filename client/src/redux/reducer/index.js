@@ -4,12 +4,13 @@ const initialState = {
   games: [],
   genres: [],
   detailGame: {},
-  sort: [],
-  gamesSortByRating: [],
-  gamesSortByAlpha: [],
-  filtByGener: [],
-  userGames: [],
-  stateBar:false,
+  // ESTADO SOLO PARA LOS SEARCHED ??
+  // sort: [],
+  // gamesSortByRating: [],
+  // gamesSortByAlpha: [],
+  // filtByGener: [],
+  // userGames: [],
+  // stateBar:false,
 
 };
 

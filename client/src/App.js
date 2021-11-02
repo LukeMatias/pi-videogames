@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import "./App.css";
 import Landing from "./components/Landing/Landing";
 import Nav from "./components/Nav/Nav";
-import CreateGame from "./components/create_game/createGame";
+import CreateGame from "./components/Create_game/CreateGame";
 import Videogames from "./components/Videogames/Videogames";
 import GameDetail from "./components/game_detail/gameDetail";
 import Footer from "./components/footer/footer";

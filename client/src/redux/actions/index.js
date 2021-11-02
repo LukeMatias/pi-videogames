@@ -6,6 +6,7 @@ export const STATE_BAR = "STATE_BAR";
 export const SORT_GAMES_BY_RATING = "SORT_GAMES_BY_RATING";
 export const SORT_GAMES_BY_ALPHA = "SORT_GAMES_BY_ALPHA";
 export const SORT = "SORT";
+export const CREATE_GAME = "CREATE_GAME";
 
 export function getGames(game) {
   return async function (dispatch) {
@@ -34,5 +35,10 @@ export function sort (dispatch){
 export function sortByRating(sort) {
   return function (dispatch) {
     dispatch({ type: SORT_GAMES_BY_RATING,sort});
+  };
+}
+export function createGame(newGame) {
+  return function (dispatch) {
+    dispatch({ type: CREATE_GAME,payload:newGame  });
   };
 }
