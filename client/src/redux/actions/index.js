@@ -2,11 +2,11 @@ import axios from "axios";
 export const GET_GAMES = "GET_GAMES";
 export const GET_GENRES = "GET_GENRES";
 export const DETAIL_GAME = "DETAIL_GAME";
-export const STATE_BAR = "STATE_BAR";
-export const SORT_GAMES_BY_RATING = "SORT_GAMES_BY_RATING";
-export const SORT_GAMES_BY_ALPHA = "SORT_GAMES_BY_ALPHA";
-export const SORT = "SORT";
 export const CREATE_GAME = "CREATE_GAME";
+export const SORT_RATING = "SORT_RATING";
+export const SORT_ALPHA = "SORT_ALPHA";
+export const FILTER_BY_GENRE = "FILTER_BY_GENRE";
+export const FILTER_BY_CREATED = "FILTER_BY_CREATED";
 
 export function getGames(game) {
   return async function (dispatch) {
@@ -29,16 +29,43 @@ export function getGameById(id) {
   };
 }
 
-export function sort (dispatch){
-  return dispatch({type :SORT})
-}
-export function sortByRating(sort) {
-  return function (dispatch) {
-    dispatch({ type: SORT_GAMES_BY_RATING,sort});
+export function createGame(newGame) {
+  return async function (dispatch) {
+    // try {
+
+    // } catch (error) {
+
+    // }
+    const gameCreated = await axios.post(
+      "http://localhost:3001/videogames",
+      newGame
+    );
+
+    dispatch({ type: CREATE_GAME, payload: gameCreated.data });
   };
 }
-export function createGame(newGame) {
+
+export function sortByAlpha(payload) {
   return function (dispatch) {
-    dispatch({ type: CREATE_GAME,payload:newGame  });
+    dispatch({ type: SORT_ALPHA, payload });
+  };
+}
+
+export function filterByGenres(payload) {
+  console.log(payload);
+  return function (dispatch) {
+    dispatch({ type: FILTER_BY_GENRE, payload });
+  };
+}
+export function filterByCreated(payload) {
+  console.log(payload);
+  return function (dispatch) {
+    dispatch({ type: FILTER_BY_CREATED, payload });
+  };
+}
+export function sortByRating(payload) {
+  console.log(payload);
+  return function (dispatch) {
+    dispatch({ type: SORT_RATING, payload });
   };
 }

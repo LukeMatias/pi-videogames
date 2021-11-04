@@ -32,6 +32,7 @@ const AsideBar = styled.aside`
   justify-content: space-between;
   height: calc(100vh - 10%);
   position: fixed;
+  z-index:998;
   top: 0;
   left: 0;
   background: #165168;

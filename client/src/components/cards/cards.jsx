@@ -18,11 +18,13 @@ export default function Cards({games}) {
 
 
 const CardsLayout = styled.div`
-  border:1px solid black;
+  /* border:1px solid black; */
   display:flex;
   flex-wrap:wrap;
   padding: 1em;
-
+  @media (min-width:600px){
+      width:calc(85% - 16px)
+  }
   
   
 

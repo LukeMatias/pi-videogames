@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 import Toggle from "../Toggle/Toggle";
 
@@ -7,7 +8,7 @@ export default function Nav() {
   return (
     <NavDiv>
       <Toggle />
-      <h1>Henry Logo Nav </h1>
+      <Link to="/videogames" >Henry</Link>
     </NavDiv>
   );
 }
@@ -17,6 +18,9 @@ const NavDiv = styled.nav`
   flex-direction: row;
   justify-content: space-between;
   padding: 10px;
+  border-bottom:1px solid black;
+  /* position: fixed;
+  top:0; */
   @media (min-width: 600px){
 
     flex-direction:row-reverse;

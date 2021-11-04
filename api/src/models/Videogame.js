@@ -4,7 +4,7 @@ const { DataTypes } = require("sequelize");
 module.exports = (sequelize) => {
   // defino el modelo
   sequelize.define("videogames", {
-    id_game: {
+    id: {
       type: DataTypes.UUID,
       // secuencia de caracteres aleatorias
       defaultValue: DataTypes.UUIDV4,
@@ -20,20 +20,30 @@ module.exports = (sequelize) => {
     },
     released: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
     rating: {
-      type: DataTypes.DECIMAL,
-      allowNull: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
     platforms: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true,
+      type: DataTypes.STRING,
+      allowNull: false,
     },
-    // created_user: {
-    //   type: DataTypes.BOOLEAN,
-    //   allowNull: false,
-    //   defaultValue: true
-    // },
+    genresGame: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: false,
+    },
+    createdUser: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
+    img: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue:
+        "https://w7.pngwing.com/pngs/110/520/png-transparent-pikachu-pokemon-go-pokemon-x-and-y-ash-ketchum-pikachu-leaf-dog-like-mammal-flower.png",
+    },
   });
 };

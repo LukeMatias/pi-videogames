@@ -2,7 +2,6 @@ const axios = require("axios");
 const { Videogames, Genres } = require("../db");
 const { API_KEY } = process.env;
 
-
 // https://api.rawg.io/api/games?key=XXXXXXXXXXXXXXXXX&page_size=100
 function arrayApis(name) {
   let page = 1;
@@ -18,7 +17,7 @@ function arrayApis(name) {
       ++page;
     } else {
       const games_api_names =
-      // api con mismo name pero diferente pag
+        // api con mismo name pero diferente pag
         page > 1
           ? `https://api.rawg.io/api/games?key=${API_KEY}&page=${page}&search=${name}+`
           : `https://api.rawg.io/api/games?search=${name}&key=${API_KEY}&page_size=40`;
@@ -54,8 +53,9 @@ async function getGames(name) {
         return {
           id: game.id,
           name: game.name,
-          genres: game.genres.map((el) => el.name),
+          genresGame: game.genres.map((el) => el.name),
           img: game.background_image,
+          rating: game.rating,
         };
       });
       allGames = allGames.concat(games);
@@ -98,7 +98,7 @@ async function getGamesById(id) {
     const game = {
       img: dataGame.data.background_image,
       name: dataGame.data.name,
-      genres: dataGame.data.genres.map((el) => el.name),
+      genresGame: dataGame.data.genres.map((el) => el.name),
       description: dataGame.data.description,
       released: dataGame.data.released,
       rating: dataGame.data.rating,

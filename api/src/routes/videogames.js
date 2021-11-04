@@ -30,12 +30,13 @@ router.get("/", async (req, res) => {
     // let gamesTotal = Promise.all([getGames(name), games_db]);
     return res.send(gamesTotal.flat() || "Games not founds");
   } catch (error) {
-    res.send(error);
+    res.status(404).send(error);
   }
 });
 
 router.post("/", async (req, res) => {
-  const { name, description, genre, released, platforms, rating } = req.body;
+  const { name, description, genresGame, released, platforms, rating } =
+    req.body;
   try {
     const newGame = await Videogames.create({
       name,
@@ -43,27 +44,32 @@ router.post("/", async (req, res) => {
       released,
       rating,
       platforms,
+      genresGame,
     });
-
-    const genresDb = await Genres.findAll({ where: { name: genre } });
-    newGame.addGenre(genresDb);
-
-    res.send(newGame);
+    // revveeeerrrrrrrrr
+    // const genresDb = await Genres.findAll({ where: { name: genre } });
+    // newGame.addGenre(genresDb);
+    // console.log(newGame.json())
+    res.status(200).json(newGame);
   } catch (error) {
-    res.send(error);
+    console.log(error);
+    res.status(404).send(error);
   }
 });
 
 router.get("/:id", async (req, res) => {
   let { id } = req.params;
+  try {
+    const game =
+      // REEMPLAZAR POR .INCLUDES() ??
+      id.split("-").length > 2
+        ? await Videogames.findByPk(id)
+        : await getGamesById(id);
 
-  const game =
-  // REEMPLAZAR POR .INCLUDES() ??
-    id.split("-").length > 2
-      ? await Videogames.findByPk(id)
-      : await getGamesById(id);
-
-  res.json(game || "game not found");
+    res.status(200).send(game || "game not found");
+  } catch (error) {
+    res.status(404).send(error);
+  }
 });
 
 module.exports = router;

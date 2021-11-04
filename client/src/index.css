@@ -3,6 +3,7 @@
   padding: 0;
   box-sizing: content-box;
   text-decoration: none;
+  list-style: none;
 }
 
 body {
@@ -12,8 +13,17 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* display: flex;
+  flex-direction: column;
+  min-height: 100vh; */
 }
 
+#root{
+  
+  flex-direction: column;
+  min-height: 100vh;
+
+}
 /* code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;

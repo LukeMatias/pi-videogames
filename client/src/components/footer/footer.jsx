@@ -3,10 +3,11 @@ import React from "react";
 export default function Footer() {
   const style = {
     border: "1px solid blue",
+    marginTop: "auto",
   };
-  
+
   return (
-    <footer style={style}  >
+    <footer style={style}>
       <h1>Footer</h1>
     </footer>
   );

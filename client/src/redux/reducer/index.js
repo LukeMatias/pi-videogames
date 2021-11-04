@@ -1,17 +1,19 @@
-import { GET_GAMES, GET_GENRES, DETAIL_GAME, STATE_BAR, SORT } from "../actions";
+import {
+  GET_GAMES,
+  GET_GENRES,
+  DETAIL_GAME,
+  CREATE_GAME,
+  SORT_ALPHA,
+  FILTER_BY_GENRE,
+  FILTER_BY_CREATED,
+  SORT_RATING,
+} from "../actions";
 
 const initialState = {
   games: [],
+  toFilterGames: [],
   genres: [],
   detailGame: {},
-  // ESTADO SOLO PARA LOS SEARCHED ??
-  // sort: [],
-  // gamesSortByRating: [],
-  // gamesSortByAlpha: [],
-  // filtByGener: [],
-  // userGames: [],
-  // stateBar:false,
-
 };
 
 function rootReducer(state = initialState, action) {
@@ -20,6 +22,7 @@ function rootReducer(state = initialState, action) {
       return {
         ...state,
         games: action.payload,
+        toFilterGames: action.payload,
       };
     case GET_GENRES:
       return {
@@ -32,20 +35,69 @@ function rootReducer(state = initialState, action) {
         ...state,
         detailGame: action.payload,
       };
-    case STATE_BAR:
 
+    case CREATE_GAME:
       return {
         ...state,
-        stateBar: action.payload,
+        games: [...state.games, action.payload],
       };
-    case SORT:
-      
-
+    case FILTER_BY_GENRE:
+      const allGames = state.toFilterGames;
+      const gamesFiltered =
+        action.payload === "All"
+          ? allGames
+          : allGames.filter((g) => g.genresGame.includes(action.payload));
       return {
         ...state,
-        stateBar: action.payload,
+        games: gamesFiltered,
+      };
+    case FILTER_BY_CREATED:
+      const filtCreatedGames = state.toFilterGames;
+      const createdFiltered =
+        action.payload === "User"
+          ? filtCreatedGames.filter((g) => g.createdUser)
+          : filtCreatedGames.filter((g) => !g.createdUser);
+      return {
+        ...state,
+        games: action.payload === "All" ? state.toFilterGames : createdFiltered,
       };
 
+    case SORT_ALPHA:
+      let sortedAlpha =
+        action.payload === "asc"
+          ? state.games.sort(function (a, b) {
+              if (a.name < b.name) {
+                return -1;
+              }
+              if (a.name > b.name) {
+                return 1;
+              }
+              // a must be equal to b
+              return 0;
+            })
+          : state.games.sort(function (a, b) {
+              if (a.name < b.name) {
+                return 1;
+              }
+              if (a.name > b.name) {
+                return -1;
+              }
+              // a must be equal to b
+              return 0;
+            });
+      return {
+        ...state,
+        games: sortedAlpha,
+      };
+    case SORT_RATING:
+      let sortedRating =
+        action.payload === "asc"
+          ? state.games.sort((a, b) => a.rating - b.rating)
+          : state.games.sort((a, b) => b.rating - a.rating);
+      return {
+        ...state,
+        games: sortedRating,
+      };
     default:
       return state;
   }
