@@ -3,10 +3,9 @@ const { DataTypes } = require("sequelize");
 // Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
   // defino el modelo 
-  sequelize.define("genres", {
+  sequelize.define("genre", {
     id_genre: {
       type: DataTypes.INTEGER,
-      // secuencia de caracteres aleatorias
       primaryKey: true,
     },
     name: {

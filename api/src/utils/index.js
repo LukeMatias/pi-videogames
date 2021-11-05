@@ -1,34 +1,30 @@
 const axios = require("axios");
-const { Videogames, Genres } = require("../db");
+const { Videogame, Genre, Op } = require("../db");
 const { API_KEY } = process.env;
 
-// https://api.rawg.io/api/games?key=XXXXXXXXXXXXXXXXX&page_size=100
-function arrayApis(name) {
-  let page = 1;
-  let arr_apis = [];
-  while (page <= 3) {
-    // console.log("entro al while");
-    if (!name) {
-      const games_api =
-        page > 1
-          ? `https://api.rawg.io/api/games?key=${API_KEY}&page=${page}&page_size=40`
-          : `https://api.rawg.io/api/games?key=${API_KEY}&page_size=40`;
-      arr_apis.push(games_api);
-      ++page;
-    } else {
-      const games_api_names =
-        // api con mismo name pero diferente pag
-        page > 1
-          ? `https://api.rawg.io/api/games?key=${API_KEY}&page=${page}&search=${name}+`
-          : `https://api.rawg.io/api/games?search=${name}&key=${API_KEY}&page_size=40`;
-      // console.log("entro al else");
-      arr_apis.push(games_api_names);
-      ++page;
-    }
+function arrayApiGamesHome() {
+  let page = 2;
+  let apis = [`https://api.rawg.io/api/games?key=${API_KEY}&page_size=40`];
+  while (page <= 2) {
+    apis.push(
+      `https://api.rawg.io/api/games?key=${API_KEY}&page=${page}&page_size=40`
+    );
+    page++;
   }
-  console.log("EL NAME", name);
-  console.log("LENGTH DESDE ARR APIS", arr_apis);
-  return arr_apis;
+  return apis;
+}
+function arrayApiGamesByName(name) {
+  let page = 2;
+  let apis = [
+    `https://api.rawg.io/api/games?search=${name}&key=${API_KEY}&page_size=40`,
+  ];
+  while (page <= 2) {
+    apis.push(
+      `https://api.rawg.io/api/games?key=${API_KEY}&page=${page}&search=${name}&page_size=40`
+    );
+    page++;
+  }
+  return apis;
 }
 
 async function getApiData(api) {
@@ -41,54 +37,94 @@ async function getApiData(api) {
   }
 }
 
-async function getGames(name) {
-  const apis = arrayApis(name);
-  let allGames = [];
-
-  for (let i = 0; i < apis.length; i++) {
+const apisHome = arrayApiGamesHome();
+async function fetchApiGamesInit() {
+  let toClean = [];
+  for (let i = 0; i < apisHome.length; i++) {
     try {
-      const data = await getApiData(apis[i]);
-      // ABSTRAER EL MAP EN UNA SOLA FUNCT??
-      const games = data.map((game) => {
-        return {
-          id: game.id,
-          name: game.name,
-          genresGame: game.genres.map((el) => el.name),
-          img: game.background_image,
-          rating: game.rating,
-        };
-      });
-      allGames = allGames.concat(games);
+      const data = await getApiData(apisHome[i]);
+      toClean = toClean.concat(data);
+      console.log("Fetching finished");
     } catch (error) {
       console.log(error.message);
     }
   }
-  console.log("LENGTH DESDE ALL GAMES", allGames.length);
-  return allGames;
+  console.log("LENGTH fetchapis", toClean.length);
+
+  return toClean;
 }
 
-async function getGamesDb(condition) {
-  return await Videogames.findAll(condition);
+async function fetchApiGamesName(name) {
+  let apisByName = arrayApiGamesByName(name);
+  let toClean = [];
+  for (let i = 0; i < apisByName.length; i++) {
+    try {
+      const data = await getApiData(apisByName[i]);
+      toClean = toClean.concat(data);
+      console.log("Fetching by name finished");
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+  console.log("LENGTH fetch by name", toClean.length);
+
+  return toClean;
 }
-// async function getGamesByName(name) {
-//   let page_by_name = 1;
-//   // const games_api_by_name_pages = `https://api.rawg.io/api/games?key=${API_KEY}&page=${page_by_name}&search=${name}+`;
-//   // `https://api.rawg.io/api/games?key=${API_KEY}&page=${page_by_name}&search=${name}+`
-//   try {
-//     const dataGames = await getApiData(games_api_by_name);
-//     // SACO LOS AWAIT ??
-//     const games = await dataGames.map((game) => {
-//       return {
-//         name: game.name,
-//         genres: game.genres,
-//         img: game.background_image,
-//       };
-//     });
-//     return games;
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// }
+// console.log("FUERA DE LA FUNC",toClean)
+// console.log( "to clean", toCleanDataGames)
+function cleanDataFromApi(rawData) {
+  return rawData.map((game) => {
+    return {
+      id: game.id,
+      name: game.name,
+      genresGame: game.genres.map((el) => el.name),
+      img: game.background_image,
+      rating: game.rating,
+    };
+  });
+  // console.log("Clean data",cleanData)
+}
+// let gamesCleanedApi=null;
+// fetchApiGamesInit()
+//   .then((data) => {
+//     console.log(data.length);
+//     //  console.log(cleanDataFromApi(data))
+//     gamesCleanedApi= cleanDataFromApi(data)
+//   })
+//   .catch((err) => console.log(err));
+
+async function getGamesDb(name) {
+  const condition = name
+    ? {
+        where: { name: { [Op.substring]: name.toLowerCase() } },
+        include: {
+          model: Genre,
+          attributes: ["name"],
+          through: {
+            attributes: [],
+          },
+          // repasar
+        },
+      }
+    : {
+        include: {
+          model: Genre,
+          attributes: ["name"],
+          through: {
+            attributes: [],
+          },
+          // REVISAR
+        },
+      };
+
+  let resultQuery = JSON.parse(
+    JSON.stringify(await Videogame.findAll(condition))
+  );
+  return resultQuery.map((g) => ({
+    ...g,
+    genresGame: g.genres.map((g) => g.name),
+  }));
+}
 async function getGamesById(id) {
   const games_api_by_id = `https://api.rawg.io/api/games/${id}?key=${API_KEY}`;
   try {
@@ -120,7 +156,7 @@ async function insertGenresDb() {
       return { name: genres.name, id_genre: genres.id };
     });
     await genres.forEach((el) =>
-      Genres.findOrCreate({
+      Genre.findOrCreate({
         where: { name: el.name, id_genre: el.id_genre },
       })
     );
@@ -133,7 +169,9 @@ async function insertGenresDb() {
 
 module.exports = {
   insertGenresDb,
-  getGames,
-  getGamesById,
+  fetchApiGamesInit,
+  fetchApiGamesName,
+  cleanDataFromApi,
   getGamesDb,
+  getGamesById,
 };
