@@ -27,7 +27,7 @@ router.get("/", async (req, res) => {
       .send(gamesTotal.length > 1 ? gamesTotal.flat() : gamesTotal);
     // res.send(gamesTotal);
   } catch (error) {
-    res.status(404).send(error);
+    res.status(404).send("Juego no encontrado");
   }
 });
 router.post("/", async (req, res) => {

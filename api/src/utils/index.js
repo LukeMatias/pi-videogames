@@ -13,19 +13,19 @@ function arrayApiGamesHome() {
   }
   return apis;
 }
-function arrayApiGamesByName(name) {
-  let page = 2;
-  let apis = [
-    `https://api.rawg.io/api/games?search=${name}&key=${API_KEY}&page_size=40`,
-  ];
-  while (page <= 2) {
-    apis.push(
-      `https://api.rawg.io/api/games?key=${API_KEY}&page=${page}&search=${name}&page_size=40`
-    );
-    page++;
-  }
-  return apis;
-}
+// function arrayApiGamesByName(name) {
+//   let page = 2;
+//   let apis = [
+//     `https://api.rawg.io/api/games?search=${name}&key=${API_KEY}&page_size=40`,
+//   ];
+//   while (page <= 2) {
+//     apis.push(
+//       `https://api.rawg.io/api/games?key=${API_KEY}&page=${page}&search=${name}&page_size=40`
+//     );
+//     page++;
+//   }
+//   return apis;
+// }
 
 async function getApiData(api) {
   try {
@@ -55,17 +55,18 @@ async function fetchApiGamesInit() {
 }
 
 async function fetchApiGamesName(name) {
-  let apisByName = arrayApiGamesByName(name);
-  let toClean = [];
-  for (let i = 0; i < apisByName.length; i++) {
+  // let apisByName = arrayApiGamesByName(name);
+  // let toClean = [];
+  // for (let i = 0; i < apisByName.length; i++) {
     try {
-      const data = await getApiData(apisByName[i]);
-      toClean = toClean.concat(data);
+      const data = await getApiData(`https://api.rawg.io/api/games?search=${name}&key=${API_KEY}`);
+      toClean = data.slice(0,14);
       console.log("Fetching by name finished");
     } catch (error) {
       console.log(error.message);
+      
     }
-  }
+  // }
   console.log("LENGTH fetch by name", toClean.length);
 
   return toClean;
