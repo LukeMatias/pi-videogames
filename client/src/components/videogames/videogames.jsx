@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getGames, getGenres } from "../../redux/actions";
-import Loader from "../Loader/Loader";
 import Cards from "../Cards/Cards";
 import Pagination from "../Pagination/Pagination";
 import FiltersSection from "../FiltersSection/FiltersSection";
 import styled from "styled-components";
+import LoaderBouncer from "../../elements/loaders/loaders";
 
-// https://www.youtube.com/watch?v=IYCa1F-OWmk
-// https://www.youtube.com/watch?v=ZX3qt0UWifc&ab_channel=WebDevSimplified
-export function Videogames() {
+export default function Videogames() {
   const games = useSelector((state) => state.games);
   const genres = useSelector((state) => state.genres);
   const [videogame, setVideogame] = useState("");
@@ -24,28 +22,24 @@ export function Videogames() {
     setCurrentPage(pageNumber);
   }
   const dispatch = useDispatch();
-  // const dispatchName = useDispatch();
-  // if (!games && !genres) {
-
-  // } else {
-
-  // }
-  // useEffect( async () => {
-
-  // await Fn  } ()        , []); // eslint-disable-line
   useEffect(() => {
-    if (!games.length) {
-      console.log("Dentro del IF");
-      dispatch(getGames(videogame));
+    document.title = "Home - videogames";
+
+    if (games.length === 0) {
+      dispatch(getGames());
     }
-    if (!genres.length) {
+    if (genres.length === 0) {
       dispatch(getGenres());
     }
-    return () => {};
-  }, [videogame]); // eslint-disable-line
 
-  function handleChange(event) {
+    return () => {
+      document.title = "Vidogame - App";
+    };
+  }, [games]); // eslint-disable-line
+
+  function handleInputSearch(event) {
     setVideogame(event.target.value);
+    console.log(event.target.value);
   }
   function handleSubmit(e) {
     e.preventDefault();
@@ -58,75 +52,76 @@ export function Videogames() {
     <>
       <MainApp>
         <h1>Videogames App</h1>
-        <form onSubmit={(e) => handleSubmit(e)}>
-        {/* Cambiar el form por un div y hacer el onclick en el button pasando el handle submit
-         */}
+        <form onSubmit={handleSubmit}>
+          {/* Cambiar el form por un div y hacer el onclick en el button pasando el handle submit
+           */}
           <div>
             <input
               type="text"
               name="game"
               value={videogame}
               autoFocus={true}
-              onChange={(e) => handleChange(e)}
+              onChange={handleInputSearch}
               placeholder="Search game ..."
             />
             <button type="submit">Search</button>
           </div>
-          <Pagination
-            gamesPerPage={gamesPerPage}
-            allGames={games.length}
-            handlePagination={handlePagination}
-          />
         </form>
+        <Pagination
+          gamesPerPage={gamesPerPage}
+          allGames={games.length}
+          handlePagination={handlePagination}
+        />
         <SectionFiltAndCards>
           <FiltersSection setCurrentPage={setCurrentPage} setOrder={setOrder} />
-          {!Object.keys(games).length ? (
-            <Loader />
-          ) : (
-            <Cards games={currentGames} />
-          )}
+          {!games.length ? <LoaderBouncer/>  : <Cards games={currentGames} />}
           {/* <Cards games={games} /> */}
         </SectionFiltAndCards>
+        <Pagination
+          gamesPerPage={gamesPerPage}
+          allGames={games.length}
+          handlePagination={handlePagination}
+        />
       </MainApp>
     </>
   );
 }
 
-export default Videogames;
+// export default Videogames;
 
 const MainApp = styled.main`
   display: flex;
   flex-direction: column;
   width: 100%;
   flex-wrap: wrap;
-  div {
-    /* margin:.5em 0; */
 
-    form {
+  form {
+    div {
       margin: 1em;
       display: flex;
       flex-direction: column;
       justify-content: space-around;
       input {
-        width: 75%;
+        width: 100%;
         height: 25px;
+        margin-bottom: 0.5em;
       }
       button {
         cursor: pointer;
-        padding: 0 1em;
+        padding: 0.5em 1em;
       }
     }
   }
 
   @media (min-width: 600px) {
     form {
-      flex-direction: row;
-      /* margin-top:2em; */
       div {
-        margin: 1em 0;
+        flex-direction: row;
+        align-items: center;
         input {
-          /* width:80%; */
-          height: 2em;
+          width: 75%;
+          height: 25px;
+          margin-bottom:0;
         }
       }
     }

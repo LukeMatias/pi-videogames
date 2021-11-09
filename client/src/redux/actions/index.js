@@ -2,6 +2,7 @@ import axios from "axios";
 export const GET_GAMES = "GET_GAMES";
 export const GET_GENRES = "GET_GENRES";
 export const DETAIL_GAME = "DETAIL_GAME";
+export const CLEAN_DETAIL_GAME = "CLEAN_DETAIL_GAME";
 export const CREATE_GAME = "CREATE_GAME";
 export const SORT_RATING = "SORT_RATING";
 export const SORT_ALPHA = "SORT_ALPHA";
@@ -10,10 +11,14 @@ export const FILTER_BY_CREATED = "FILTER_BY_CREATED";
 
 export function getGames(game) {
   return async function (dispatch) {
-    const data = game.length
-      ? await axios.get(`http://localhost:3001/videogames?name=${game}`)
-      : await axios.get(`http://localhost:3001/videogames`);
-    dispatch({ type: GET_GAMES, payload: data.data });
+    try {
+      const data = game
+        ? await axios.get(`http://localhost:3001/videogames?name=${game}`)
+        : await axios.get(`http://localhost:3001/videogames`);
+      dispatch({ type: GET_GAMES, payload: data.data });
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 }
 export function getGenres() {
@@ -24,24 +29,32 @@ export function getGenres() {
 }
 export function getGameById(id) {
   return async function (dispatch) {
-    const data = await axios.get(`http://localhost:3001/videogames/${id}`);
-    dispatch({ type: DETAIL_GAME, payload: data.data });
+    try {
+      const data = await axios.get(`http://localhost:3001/videogames/${id}`);
+      dispatch({ type: DETAIL_GAME, payload: data.data });
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+}
+export function cleanGameId() {
+  return async function (dispatch) {
+    dispatch({ type: CLEAN_DETAIL_GAME, payload: undefined });
   };
 }
 
 export function createGame(newGame) {
   return async function (dispatch) {
-    // try {
-
-    // } catch (error) {
-
-    // }
-    const gameCreated = await axios.post(
-      "http://localhost:3001/videogames",
-      newGame
-    );
-
-    dispatch({ type: CREATE_GAME, payload: gameCreated.data });
+    try {
+      const gameCreated = await axios.post(
+        "http://localhost:3001/videogames",
+        newGame
+      );
+      console.log(gameCreated.data);
+      dispatch({ type: CREATE_GAME, payload: gameCreated.data });
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 }
 

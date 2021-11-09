@@ -1,171 +1,275 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { createGame } from "../../redux/actions";
+import { createGame, getGenres } from "../../redux/actions";
+import { Link } from "react-router-dom";
 
 export default function CreateGame() {
+  const [errors, setErrors] = useState({});
   const genres = useSelector((state) => state.genres);
-  const [showGenres, setShowGenres] = useState(false);
+  const gameCreated = useSelector((state) => state.gameCreated);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    document.title = "Create - Game";
+    console.log(errors);
+    if (genres.length === 0) {
+      dispatch(getGenres());
+    }
+  }, []); //eslint-disable-line
+
   const [form, setForm] = useState({
     name: "",
     description: "",
     genresGame: [],
     released: "",
     rating: "",
-    platforms: [],
+    // platforms: [],
+    platforms: "",
   });
 
-  function handleCheckBox(e) {
-    if (e.target.checked) {
-      setForm({
-        ...form,
-        genresGame: [...form.genresGame, e.target.value],
-      });
-    } else {
-      setForm({
-        ...form,
-        genresGame: form.genresGame.filter((g) => g !== e.target.value),
-      });
-    }
+  function validateInputs(formData) {
+    const errors = {};
+    if (!formData.name.trim()) errors.Name = "Name is required";
+    if (!formData.description.trim())
+      errors.Description = "Description is required";
+    if (formData.genresGame.length === 0)
+      errors.Genres = "Must select some Genre";
+    if (!formData.released.trim()) errors.Released = "Must select a date";
+    if (!formData.rating.trim())
+      // || typeof formData.rating !== "number"
+      errors.Rating = "Required and must be a number";
+    if (!formData.platforms.trim())
+      errors.Platforms = "Must select some Platforms";
+    return errors;
+  }
+
+  function handleSelect(e) {
+    setForm({
+      ...form,
+      genresGame: [...form.genresGame, e.target.value],
+    });
+  }
+
+  function handleOfSelect(e) {
+    setForm({
+      ...form,
+      genresGame: form.genresGame.filter((g) => g !== e),
+    });
   }
   function handleChange(e) {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
+
+    setErrors(
+      validateInputs({
+        ...form,
+        [e.target.name]: e.target.value,
+      })
+    );
   }
 
   function handleSubmit(e) {
     e.preventDefault();
-    dispatch(createGame(form));
-    // axios.post("http://localhost:3001/videogames", form);
-
-    // setForm({
-    //   name: "",
-    //   description: "",
-    //   genres: [],
-    //   released: "",
-    //   rating: "",
-    //   platforms: [],
-    // });
+    if (Object.values(errors).length) {
+      console.log(Object.values(errors));
+      alert(
+        `Sorry, please complete the following Data : ${Object.values(
+          errors
+        ).map((err) => err + " ")}`
+      );
+    } else {
+      try {
+        dispatch(createGame(form));
+        alert("Game succed created");
+        setForm({
+          name: "",
+          description: "",
+          genresGame: [],
+          released: "",
+          rating: "",
+          // platforms: [],
+          platforms: "",
+        });
+      } catch (err) {
+        alert(`It may be an error ${err.message}`);
+      }
+    }
   }
-  // Deberia traer los generos al estado y renderizar cada uno por input
   return (
-    <FormLayout>
-      <h1>Create Game</h1>
-
-      <FormBox onSubmit={(e) => handleSubmit(e)}>
-        <DivInput>
-          <label>Name</label>
-          <input
-          placeholder="Create a name ..."
-            type="text"
-            value={form.name}
-            name="name"
-            onChange={handleChange}
-          />
-        </DivInput>
-        <DivInput>
-          <label>Description</label>
-          <textarea
-            type="text"
-          placeholder="Create a description ..."
-
-            value={form.description}
-            name="description"
-            onChange={handleChange}
-          ></textarea>
-        </DivInput>
-        <DivInputGenres>
-          <ButtonGenres onClick={() => setShowGenres(!showGenres)}>
-            <p>Select Genres</p>
-            <p>&gt;&gt;</p>
-          </ButtonGenres>
-          <DivGenres showGenres={showGenres}>
-            {genres.map((g, i) => {
-              return (
-                <div  key={g.id}>
-                  <label >{g.name}</label>
-                  <input
-                    // key={i}
-                    type="checkbox"
-                    value={g.name}
-                    onChange={handleCheckBox}
-                  />
-                </div>
-              );
+    <BgImg>
+      <FormLayout>
+        <div>
+          <h1>Create Game</h1>
+          <button>
+            <Link to="/videogames">Back</Link>
+          </button>
+        </div>
+        <FormBox onSubmit={(e) => handleSubmit(e)}>
+          <DivInput>
+            <label>Name</label>
+            <ErrorMessage>{errors.Name}</ErrorMessage>
+            <input
+              placeholder="Create a name ..."
+              type="text"
+              value={form.name}
+              name="name"
+              autoFocus={true}
+              onChange={handleChange}
+            />
+          </DivInput>
+          <DivInput>
+            <label>Description</label>
+            <ErrorMessage>{errors.Description}</ErrorMessage>
+            <textarea
+              type="text"
+              placeholder="Create a description ..."
+              value={form.description}
+              name="description"
+              onChange={handleChange}
+            ></textarea>
+          </DivInput>
+          <DivInputGenres>
+            <select onChange={handleSelect}>
+              {genres.map((g, i) => {
+                return (
+                  <option key={i} value={g.name}>
+                    {g.name}
+                  </option>
+                );
+              })}
+            </select>
+            <ErrorMessage>{errors.Genres}</ErrorMessage>
+            <ul>
+              {form.genresGame.map((g, i) => {
+                return (
+                  <div key={i}>
+                    <li>{g}</li>
+                    <button key={g} onClick={() => handleOfSelect(g)}>
+                      x
+                    </button>
+                  </div>
+                );
+              })}
+            </ul>
+          </DivInputGenres>
+          <DivInput>
+            <label>Released Date</label>
+            <ErrorMessage>{errors.Released}</ErrorMessage>
+            <input
+              type="date"
+              onChange={handleChange}
+              name="released"
+              value={form.released}
+            />
+          </DivInput>
+          <DivInput>
+            <label>Rating</label>
+            <ErrorMessage>{errors.Rating}</ErrorMessage>
+            <input
+              type="number"
+              placeholder="Select a rating btw 0 and 10..."
+              onChange={handleChange}
+              min="0"
+              max="10"
+              name="rating"
+              value={form.rating}
+            />
+          </DivInput>
+          <DivInput>
+            <label>Platforms</label>
+            {/* <button>Add</button> */}
+            <ErrorMessage> {errors.Platforms}</ErrorMessage>
+            <input
+              type="input"
+              onChange={handleChange}
+              placeholder="Type and add platforms"
+              name="platforms"
+              value={form.platforms}
+            />
+          </DivInput>
+          <button type="submit">Create</button>
+          {/* <button type="submit">Create New</button> */}
+          {/* Debe cambiar el value a submit o crear nuevo juego */}
+          {/* <ul>
+            {Object.keys(errors).map((e, i) => {
+              return <ErrorMessage key={i}>{`${e} is required.`}</ErrorMessage>;
             })}
-          </DivGenres>
-        </DivInputGenres>
-        <DivInput>
-          <label>Released Date</label>
-          <input
-            type="date"
-            onChange={handleChange}
-            name="released"
-            value={form.released}
-          />
-        </DivInput>
-        <DivInput>
-          <label>Rating</label>
-          <input
-            type="number"
-          placeholder="Select a rating btw 0 and 10..."
-
-            onChange={handleChange}
-            min="0"
-            max="10"
-            name="rating"
-            value={form.rating}
-          />
-        </DivInput>
-        <DivInput>
-          <label>Platforms</label>
-          <input
-            type="input"
-            onChange={handleChange}
-          placeholder="Put the platforms matchers for your new game separate for comas..."
-
-            name="platforms"
-            value={form.platforms}
-          />
-        </DivInput>
-        {/* <input type="submit" value="enviar" /> */}
-        <button type="submit">Save</button>
-      </FormBox>
-      {/* Debe cambiar el value a submit o crear nuevo juego */}
-    </FormLayout>
+          </ul> */}
+        </FormBox>
+      </FormLayout>
+    </BgImg>
   );
 }
 
+const BgImg = styled.div`
+  /* background: url(/images/scorpion.png) no-repeat right; */
+  background-size: cover;
+  background-color: grey;
+  @media (min-width: 600px) {
+    background: url(/images/scorpion.png) no-repeat right;
+    background-color: grey;
+    background-size: cover;
+  }
+
+  /* height:100vh; */
+  /* filter: blur(8px);
+  -webkit-filter: blur(8px); */
+`;
+
+const ErrorMessage = styled.p`
+  color: red;
+  font-weight: bold;
+`;
 const FormLayout = styled.main`
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
+  min-height: 100vh;
   padding: 1em;
+  box-shadow: 0 0 80px -10px black;
+
   h1 {
-    margin-bottom: 1em;
+    margin-bottom: 0.5em;
+  }
+  div {
+    button {
+      padding: 0 0.5em;
+      margin-bottom: 0.5em;
+      cursor: pointer;
+    }
+  }
+
+  @media (min-width: 1000px) {
+    /* background-position: center; */
+    padding: 1em 5em;
+    div {
+      button {
+        padding: 0.5em 1em;
+        margin-bottom: 1em;
+      }
+    }
   }
 `;
 
 const FormBox = styled.form`
-  /* border:1px solid black; */
   display: flex;
   flex-direction: column;
   width: calc(90% - 16px);
-  height: 50vh;
-
   button {
-    padding: 1em;
+    width: 50%;
+    padding: 0.5em 0.5em;
     cursor: pointer;
+  }
+  @media (min-width: 1000px) {
+    width: 50%;
   }
 `;
 const DivInput = styled.div`
   display: flex;
   flex-direction: column-reverse;
-  /* justify-content:space-between; */
   align-items: flex-start;
   margin-bottom: 1em;
   input,
@@ -173,56 +277,37 @@ const DivInput = styled.div`
     width: 100%;
     height: 3.5em;
   }
-`;
-export const DivGenres = styled.div`
-  display: ${({ showGenres }) => {
-    return !showGenres ? "none" : "flex";
-  }}  ;
-  z-index:1;
-  
-  ;
-  flex-direction: row;
-  flex-wrap: wrap;
-  border: 1px solid black;
-  position: absolute;
-  top: 39px;
-  background-color: #fff;
-  width: 100%;
-  transition: transform 0.3s ease-in-out;
-
-  div {
-    display: flex;
-    justify-content: space-between;
-    width: 50%;
-    margin: auto;
-    input {
-      cursor: pointer;
-    }
+  label {
+    margin-top: 0.5em;
+    color: #ffffff;
+    font-weight: bold;
+    /* background-color:whitesmoke; */
   }
 `;
 
 const DivInputGenres = styled.div`
   display: flex;
   flex-direction: column;
-  /* justify-content:space-between; */
   align-items: flex-start;
   margin-bottom: 1em;
-  position: relative;
+  select,
+  option {
+    cursor: pointer;
+  }
+  ul {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  ul div {
+    display: flex;
+    margin-left: 0.5em;
+    button {
+      padding: 0 0.5em;
+      cursor: pointer;
+      background-color: red;
 
-  /* input,
-  textarea {
-    width: 100%;
-    height: 3.5em;
-  } */
-`;
-
-const ButtonGenres = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  border: 1px solid black;
-  border-radius: 5px;
-  padding: 0.5em 2em;
-  cursor: pointer;
-  width: 80%;
+      outline: none;
+    }
+  }
 `;

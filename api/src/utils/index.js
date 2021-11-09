@@ -1,18 +1,21 @@
 const axios = require("axios");
 const { Videogame, Genre, Op } = require("../db");
 const { API_KEY } = process.env;
+// APIS
+const apiPageOne = `https://api.rawg.io/api/games?key=${API_KEY}&page_size=40`;
+const apiPageTwo = `https://api.rawg.io/api/games?key=${API_KEY}&page=2&page_size=40`;
 
-function arrayApiGamesHome() {
-  let page = 2;
-  let apis = [`https://api.rawg.io/api/games?key=${API_KEY}&page_size=40`];
-  while (page <= 2) {
-    apis.push(
-      `https://api.rawg.io/api/games?key=${API_KEY}&page=${page}&page_size=40`
-    );
-    page++;
-  }
-  return apis;
-}
+// function arrayApiGamesHome() {
+//   let page = 2;
+//   let apis = [`https://api.rawg.io/api/games?key=${API_KEY}&page_size=40`];
+//   while (page <= 2) {
+//     apis.push(
+//       `https://api.rawg.io/api/games?key=${API_KEY}&page=${page}&page_size=40`
+//     );
+//     page++;
+//   }
+//   return apis;
+// }
 // function arrayApiGamesByName(name) {
 //   let page = 2;
 //   let apis = [
@@ -36,43 +39,14 @@ async function getApiData(api) {
     console.log(error.message);
   }
 }
+const arrayPromises = [getApiData(apiPageOne), getApiData(apiPageTwo)];
 
-const apisHome = arrayApiGamesHome();
-async function fetchApiGamesInit() {
-  let toClean = [];
-  for (let i = 0; i < apisHome.length; i++) {
-    try {
-      const data = await getApiData(apisHome[i]);
-      toClean = toClean.concat(data);
-      console.log("Fetching finished");
-    } catch (error) {
-      console.log(error.message);
-    }
-  }
-  console.log("LENGTH fetchapis", toClean.length);
-
-  return toClean;
+function fetchApiGamesName(name) {
+  return getApiData(
+    `https://api.rawg.io/api/games?search=${name}&key=${API_KEY}`
+  );
 }
 
-async function fetchApiGamesName(name) {
-  // let apisByName = arrayApiGamesByName(name);
-  // let toClean = [];
-  // for (let i = 0; i < apisByName.length; i++) {
-    try {
-      const data = await getApiData(`https://api.rawg.io/api/games?search=${name}&key=${API_KEY}`);
-      toClean = data.slice(0,14);
-      console.log("Fetching by name finished");
-    } catch (error) {
-      console.log(error.message);
-      
-    }
-  // }
-  console.log("LENGTH fetch by name", toClean.length);
-
-  return toClean;
-}
-// console.log("FUERA DE LA FUNC",toClean)
-// console.log( "to clean", toCleanDataGames)
 function cleanDataFromApi(rawData) {
   return rawData.map((game) => {
     return {
@@ -83,16 +57,7 @@ function cleanDataFromApi(rawData) {
       rating: game.rating,
     };
   });
-  // console.log("Clean data",cleanData)
 }
-// let gamesCleanedApi=null;
-// fetchApiGamesInit()
-//   .then((data) => {
-//     console.log(data.length);
-//     //  console.log(cleanDataFromApi(data))
-//     gamesCleanedApi= cleanDataFromApi(data)
-//   })
-//   .catch((err) => console.log(err));
 
 async function getGamesDb(name) {
   const condition = name
@@ -126,6 +91,7 @@ async function getGamesDb(name) {
     genresGame: g.genres.map((g) => g.name),
   }));
 }
+
 async function getGamesById(id) {
   const games_api_by_id = `https://api.rawg.io/api/games/${id}?key=${API_KEY}`;
   try {
@@ -136,7 +102,7 @@ async function getGamesById(id) {
       img: dataGame.data.background_image,
       name: dataGame.data.name,
       genresGame: dataGame.data.genres.map((el) => el.name),
-      description: dataGame.data.description,
+      description: dataGame.data.description_raw,
       released: dataGame.data.released,
       rating: dataGame.data.rating,
       platforms: dataGame.data.platforms.map((el) => el.platform.name),
@@ -170,9 +136,9 @@ async function insertGenresDb() {
 
 module.exports = {
   insertGenresDb,
-  fetchApiGamesInit,
-  fetchApiGamesName,
   cleanDataFromApi,
   getGamesDb,
   getGamesById,
+  arrayPromises,
+  fetchApiGamesName,
 };

@@ -8,7 +8,9 @@ export default function Nav() {
   return (
     <NavDiv>
       <Toggle />
-      <Link to="/videogames" >Henry</Link>
+      <Link to="/videogames">
+        <img src="favicon.ico" alt="henrylogo" />
+      </Link>
     </NavDiv>
   );
 }
@@ -18,11 +20,10 @@ const NavDiv = styled.nav`
   flex-direction: row;
   justify-content: space-between;
   padding: 10px;
-  border-bottom:1px solid black;
+  border-bottom: 1px solid black;
   /* position: fixed;
   top:0; */
-  @media (min-width: 600px){
-
-    flex-direction:row-reverse;
+  @media (min-width: 600px) {
+    flex-direction: row-reverse;
   }
 `;

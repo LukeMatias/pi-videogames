@@ -5,12 +5,15 @@ import styled from "styled-components";
 export default function Card({ game }) {
   return (
     <CardGame key={game.id}>
-      <img src={game.img} alt={"games"} loading="lazy" />
+      <img src={game.img} alt={"Loading ..."} loading="lazy" />
       <BoxBottom>
-        <Link to={`/videogames/${game.id}`}>{game.name}</Link>
+        
+        <Link to={`/videogames/${game.id}`}><h5>{game.name}</h5></Link>
         <DivGenres>
-          {game.genresGame.map((g) => {
-            return <div key={g}>{g}</div>;
+          {game.genresGame?.map((g) => {
+            return (
+              <div key={g}>{!game.genresGame.length ? "Loading..." : g}</div>
+            );
           })}
         </DivGenres>
       </BoxBottom>
@@ -28,6 +31,17 @@ const CardGame = styled.div`
   height: 200px;
   margin: 1em 0.5em;
   position: relative;
+  border-radius: 8px;
+
+  /* background-size: cover; */
+  /* background-position: center; */
+  /* background-repeat: no-repeat; */
+  box-shadow: 0 0 80px -10px black;
+  /* overflow: hidden; */
+  /* cursor: pointer; */
+  img:hover {
+    /* transform: ; */
+  }
 
   /* box-sizing: content-box; */
   @media (min-width: 600px) {
@@ -39,17 +53,16 @@ const CardGame = styled.div`
   }
   @media (min-width: 1000px) {
     width: calc(33% - 18px);
-    
   }
   @media (min-width: 1500px) {
     width: calc(25% - 18px);
-    
   }
-
 
   img {
     width: 100%;
     height: 100%;
+    border-radius: 8px;
+
     object-fit: cover;
   }
 
@@ -63,13 +76,8 @@ const BoxBottom = styled.div`
   bottom: 0;
   display: flex;
   justify-content: space-around;
-  background:turquoise;
-  /* background: rgba(51, 170, 51, 0.4); */
+  background: white;
   width: 100%;
-  /* height: 2em; */
 `;
 
-const DivGenres = styled.div`
-
-
-`;
+const DivGenres = styled.div``;

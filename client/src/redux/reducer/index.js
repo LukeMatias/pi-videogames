@@ -7,12 +7,14 @@ import {
   FILTER_BY_GENRE,
   FILTER_BY_CREATED,
   SORT_RATING,
+  CLEAN_DETAIL_GAME,
 } from "../actions";
 
 const initialState = {
   games: [],
   toFilterGames: [],
   genres: [],
+  gameCreated: {},
   detailGame: {},
 };
 
@@ -40,6 +42,7 @@ function rootReducer(state = initialState, action) {
       return {
         ...state,
         games: [...state.games, action.payload],
+        gameCreated: action.payload,
       };
     case FILTER_BY_GENRE:
       const allGames = state.toFilterGames;
@@ -66,21 +69,21 @@ function rootReducer(state = initialState, action) {
       let sortedAlpha =
         action.payload === "asc"
           ? state.games.sort(function (a, b) {
-              if (a.name < b.name) {
+              if (a.name.toLowerCase() < b.name.toLowerCase()) {
                 return -1;
               }
-              if (a.name > b.name) {
+              if (a.name.toLowerCase() > b.name.toLowerCase()) {
                 return 1;
               }
               // a must be equal to b
               return 0;
             })
           : state.games.sort(function (a, b) {
-              if (a.name < b.name) {
-                return 1;
-              }
-              if (a.name > b.name) {
+              if (b.name.toLowerCase() < a.name.toLowerCase()) {
                 return -1;
+              }
+              if (b.name.toLowerCase() > a.name.toLowerCase()) {
+                return 1;
               }
               // a must be equal to b
               return 0;
@@ -97,6 +100,11 @@ function rootReducer(state = initialState, action) {
       return {
         ...state,
         games: sortedRating,
+      };
+    case CLEAN_DETAIL_GAME:
+      return {
+        ...state,
+        detailGame: action.payload,
       };
     default:
       return state;

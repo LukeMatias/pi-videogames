@@ -2,8 +2,9 @@
   margin: 0;
   padding: 0;
   box-sizing: content-box;
-  text-decoration: none;
+  text-decoration: none !important ;
   list-style: none;
+  
 }
 
 body {
@@ -16,8 +17,13 @@ body {
   /* display: flex;
   flex-direction: column;
   min-height: 100vh; */
+ 
 }
 
+a, a:hover, a:focus, a:active {
+  text-decoration: none;
+  color: inherit;
+}
 #root{
   
   flex-direction: column;

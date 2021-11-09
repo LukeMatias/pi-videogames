@@ -51,32 +51,14 @@ export default function FiltersSection({ setCurrentPage, setOrder }) {
       </select>
       <select onChange={(e) => handleFilterGenres(e)}>
         <option value="All">All Games</option>
-        {genres.map((g) => {
-          return <option value={g.name}>{g.name}</option>;
+        {genres.map((g, i) => {
+          return (
+            <option key={i} value={g.name}>
+              {g.name}
+            </option>
+          );
         })}
       </select>
-
-      {/* <SelectGenres>
-        <Genres onClick={() => setShowGenres(!showGenres)}>
-          <p>Genres</p>
-          <p>&gt;&gt;</p>
-        </Genres>
-        <DivGenres showGenres={showGenres}>
-          {genres.map((g, i) => {
-            return (
-              <div key={g.id}>
-                <label key={g.name}>{g.name}</label>
-                <input
-                  key={i}
-                  type="checkbox"
-                  value={g.name}
-                  // onChange={handleCheckBox}
-                />
-              </div>
-            );
-          })}
-        </DivGenres>
-      </SelectGenres> */}
     </FilterBox>
   );
 }
@@ -89,10 +71,17 @@ const FilterBox = styled.div`
   flex-wrap: wrap;
   padding: 0 1em;
 
+  select {
+    cursor: pointer;
+    option:hover {
+      cursor: pointer;
+    }
+  }
+
   @media (min-width: 600px) {
     background-color: #165168;
     flex-direction: column;
-    width: 15%;
+    width: min-content;
     justify-content: flex-start;
     padding-top: 32px;
     /* height:100vh; */
@@ -129,3 +118,25 @@ const FilterBox = styled.div`
     height: 3.5em;
   } */
 // `;
+
+/* <SelectGenres>
+        <Genres onClick={() => setShowGenres(!showGenres)}>
+          <p>Genres</p>
+          <p>&gt;&gt;</p>
+        </Genres>
+        <DivGenres showGenres={showGenres}>
+          {genres.map((g, i) => {
+            return (
+              <div key={g.id}>
+                <label key={g.name}>{g.name}</label>
+                <input
+                  key={i}
+                  type="checkbox"
+                  value={g.name}
+                  // onChange={handleCheckBox}
+                />
+              </div>
+            );
+          })}
+        </DivGenres>
+      </SelectGenres> */
