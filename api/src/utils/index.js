@@ -5,31 +5,6 @@ const { API_KEY } = process.env;
 const apiPageOne = `https://api.rawg.io/api/games?key=${API_KEY}&page_size=40`;
 const apiPageTwo = `https://api.rawg.io/api/games?key=${API_KEY}&page=2&page_size=40`;
 
-// function arrayApiGamesHome() {
-//   let page = 2;
-//   let apis = [`https://api.rawg.io/api/games?key=${API_KEY}&page_size=40`];
-//   while (page <= 2) {
-//     apis.push(
-//       `https://api.rawg.io/api/games?key=${API_KEY}&page=${page}&page_size=40`
-//     );
-//     page++;
-//   }
-//   return apis;
-// }
-// function arrayApiGamesByName(name) {
-//   let page = 2;
-//   let apis = [
-//     `https://api.rawg.io/api/games?search=${name}&key=${API_KEY}&page_size=40`,
-//   ];
-//   while (page <= 2) {
-//     apis.push(
-//       `https://api.rawg.io/api/games?key=${API_KEY}&page=${page}&search=${name}&page_size=40`
-//     );
-//     page++;
-//   }
-//   return apis;
-// }
-
 async function getApiData(api) {
   try {
     const dataApi = await axios.get(api);
@@ -69,7 +44,6 @@ async function getGamesDb(name) {
           through: {
             attributes: [],
           },
-          // repasar
         },
       }
     : {
@@ -79,7 +53,6 @@ async function getGamesDb(name) {
           through: {
             attributes: [],
           },
-          // REVISAR
         },
       };
 
@@ -117,7 +90,6 @@ async function insertGenresDb() {
   const genres_api = `https://api.rawg.io/api/genres?key=${API_KEY}`;
   try {
     const dataGenres = await getApiData(genres_api);
-    // SACO LOS AWAIT ??
 
     const genres = await dataGenres.map((genres) => {
       return { name: genres.name, id_genre: genres.id };
@@ -142,3 +114,28 @@ module.exports = {
   arrayPromises,
   fetchApiGamesName,
 };
+
+// function arrayApiGamesHome() {
+//   let page = 2;
+//   let apis = [`https://api.rawg.io/api/games?key=${API_KEY}&page_size=40`];
+//   while (page <= 2) {
+//     apis.push(
+//       `https://api.rawg.io/api/games?key=${API_KEY}&page=${page}&page_size=40`
+//     );
+//     page++;
+//   }
+//   return apis;
+// }
+// function arrayApiGamesByName(name) {
+//   let page = 2;
+//   let apis = [
+//     `https://api.rawg.io/api/games?search=${name}&key=${API_KEY}&page_size=40`,
+//   ];
+//   while (page <= 2) {
+//     apis.push(
+//       `https://api.rawg.io/api/games?key=${API_KEY}&page=${page}&search=${name}&page_size=40`
+//     );
+//     page++;
+//   }
+//   return apis;
+// }

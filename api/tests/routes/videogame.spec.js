@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 const { expect, assert } = require("chai");
 const session = require("supertest-session");
 const app = require("../../src/app.js");
@@ -24,15 +23,14 @@ describe("Videogame routes", () => {
   beforeEach(() =>
     Videogame.sync({ force: true }).then(() => Videogame.create(videogame))
   );
-  describe("GET /videogames", () => {
-    it("should get 200", () =>
-      agent.get("/videogames").then((game) => {
-        assert.equal(game);
-        
-        done();
-      }).catch(err => done(err))
-      
-      
-      );
+  describe("GET /videogames", function () {
+    it("should get 200", function () {
+      agent
+        .get("/videogames")
+        .expect(200)
+        .expect(function (res) {
+          expect(res.body).toEqual(videogame);
+        });
+    });
   });
 });

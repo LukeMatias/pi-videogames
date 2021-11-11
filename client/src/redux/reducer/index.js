@@ -56,13 +56,16 @@ function rootReducer(state = initialState, action) {
       };
     case FILTER_BY_CREATED:
       const filtCreatedGames = state.toFilterGames;
+
       const createdFiltered =
         action.payload === "User"
           ? filtCreatedGames.filter((g) => g.createdUser)
           : filtCreatedGames.filter((g) => !g.createdUser);
+      console.log(createdFiltered);
       return {
         ...state,
         games: action.payload === "All" ? state.toFilterGames : createdFiltered,
+       
       };
 
     case SORT_ALPHA:
@@ -75,7 +78,6 @@ function rootReducer(state = initialState, action) {
               if (a.name.toLowerCase() > b.name.toLowerCase()) {
                 return 1;
               }
-              // a must be equal to b
               return 0;
             })
           : state.games.sort(function (a, b) {
@@ -85,7 +87,6 @@ function rootReducer(state = initialState, action) {
               if (b.name.toLowerCase() > a.name.toLowerCase()) {
                 return 1;
               }
-              // a must be equal to b
               return 0;
             });
       return {

@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import LoaderBouncer from "../../elements/loaders/loaders";
 import { cleanGameId, getGameById } from "../../redux/actions";
 import styled from "styled-components";
+import Nav from "../Nav/Nav";
+import Footer from "../footer/footer";
 
 export default function GameDetail({ id }) {
   const dispatch = useDispatch();
@@ -14,16 +16,17 @@ export default function GameDetail({ id }) {
     };
   }, []); //eslint-disable-line
 
-  // var doc = new DOMParser().parseFromString(html, "text/html");
   return (
-    <>
+    <Container>
+      <Nav />
       {!game ? (
         <LoaderBouncer />
       ) : (
         <LandingDetail>
           <h1>{game.name}</h1>
+
           <ImgDiv>
-            <img src={game.img} alt={<LoaderBouncer />} />
+            <img src={game.img} alt={"loading"} />
           </ImgDiv>
           <DescDiv>{game.description}</DescDiv>
           <DataDiv>
@@ -50,33 +53,45 @@ export default function GameDetail({ id }) {
                 )}
               </div>
             </div>
+                {/*   */}
           </DataDiv>
         </LandingDetail>
       )}
-    </>
+      <Footer />
+    </Container>
   );
 }
-const LandingDetail = styled.div`
-  /* background-image: ; */
-  /* opacity: 0.75; */
+
+const Container = styled.main`
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
+  background: url(/images/bg-detail-2.jpg) no-repeat center;
+  background-size: cover;
+  height: 100vh;
+`;
+
+const LandingDetail = styled.section`
+  display: flex;
+  flex-direction: column;
+  /* justify-content:space-between; */
   padding: 1em 2em;
-  justify-content: center;
+  align-items: center;
+  /* height: 100vh; */
   h1 {
     text-align: justify;
     margin-bottom: 0.5em;
+    color: #ffff;
   }
   p {
     font-weight: bold;
   }
   @media (min-width: 1300px) {
+
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-between;
     padding: 0 5em;
-
+    
     h1 {
       width: 100%;
       margin: 1em auto;
@@ -86,37 +101,48 @@ const LandingDetail = styled.div`
     }
     div:nth-child(3) {
       width: calc(40% - 2em);
-      /* height: 100%; */
-      padding:1em;
+      padding: 1em;
     }
     div:nth-child(4) {
       width: 100%;
     }
+    /* 
+    */
   }
 `;
 const ImgDiv = styled.div`
+  width: 150px;
+  height: 150px;
   text-align: center;
   margin-bottom: 0.5em;
 
   img {
     width: 100%;
-    height: 10em;
-    object-fit: contain;
+    height: 100%;
+    object-fit: cover;
   }
-  @media (min-width: 800px) {
+  @media (min-width: 900px) {
+    width:300px;
+    height:300px;
     margin-bottom: 2em;
     img {
-      height: fit-content;
+      background-position:top;
+      background-size: contain;
     }
   }
+  /*
+  */
 `;
 const DescDiv = styled.div`
   text-align: justify;
   margin-bottom: 1.5em;
+  background-color: white;
 
-  @media (min-width: 800px) {
+  @media (min-width: 900px) {
     margin-bottom: 5em;
   }
+  /*
+   */
 `;
 const DataDiv = styled.div`
   margin-bottom: 1.5em;

@@ -21,6 +21,8 @@ const NavDiv = styled.nav`
   justify-content: space-between;
   padding: 10px;
   border-bottom: 1px solid black;
+  background-color:#ffffff;
+
   /* position: fixed;
   top:0; */
   @media (min-width: 600px) {

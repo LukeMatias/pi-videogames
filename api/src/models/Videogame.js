@@ -30,11 +30,6 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-
-    // genresGame: {
-    //   type: DataTypes.ARRAY(DataTypes.STRING),
-    //   allowNull: false,
-    // },
     createdUser: {
       type: DataTypes.BOOLEAN,
       allowNull: false,

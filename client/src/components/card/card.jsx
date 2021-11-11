@@ -33,17 +33,10 @@ const CardGame = styled.div`
   position: relative;
   border-radius: 8px;
 
-  /* background-size: cover; */
-  /* background-position: center; */
-  /* background-repeat: no-repeat; */
   box-shadow: 0 0 80px -10px black;
-  /* overflow: hidden; */
-  /* cursor: pointer; */
   img:hover {
-    /* transform: ; */
   }
 
-  /* box-sizing: content-box; */
   @media (min-width: 600px) {
     width: calc(50% - 18px);
     height: 400px;

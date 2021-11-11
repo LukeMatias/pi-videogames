@@ -19,11 +19,16 @@ router.get("/", async (req, res) => {
   if (name) {
     fetchApiGamesName(name)
       .then((data) => {
-        games = cleanDataFromApi(data.slice(0, 15));
-        // console.log(games)
-        res.send([games, games_db].flat());
-
-        return games;
+        if (data.length === 0) {
+          res.send("Game not found");          
+        } else {
+          
+          games = cleanDataFromApi(data.slice(0, 15));
+          // console.log(games)
+          res.send([games, games_db].flat());
+          
+          // return games;
+        }
       })
       .catch((err) => res.status(404).send(err, "Juago no encontrado"));
   } else {
@@ -40,8 +45,8 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   const { name, description, genresGame, released, platforms, rating } =
     req.body;
-    if (Object.values(req.body)[0].length === 0) {
     console.log("PROPERTISSS",req.body)
+    if (Object.values(req.body)[0].length === 0) {
     
     res.status(404).send("Please complete the required Data");
   } else {
@@ -54,7 +59,6 @@ router.post("/", async (req, res) => {
         rating,
         platforms,
       });
-      // revveeeerrrrrrrrr
       const genresDb = await Genre.findAll({ where: { name: genresGame } });
       newGame.addGenres(genresDb);
       res.status(200).json(newGame);
@@ -73,7 +77,7 @@ router.get("/:id", async (req, res) => {
       ? await Videogame.findByPk(id)
       : await getGamesById(id);
 
-    res.status(200).send(game || "game not found");
+    res.status(200).send(game);
   } catch (error) {
     res.status(404).send(error);
   }

@@ -5,11 +5,12 @@ export default function Pagination({
   gamesPerPage,
   allGames,
   handlePagination,
+  currentPage,
 }) {
-  // const style = {
-  //   display: "flex",
-  // };
   const pageNumbers = [];
+  // const active = {
+  //   borderBottom :  currentPage === num ? "red" : "none"
+  // }
 
   for (let i = 1; i <= Math.ceil(allGames / gamesPerPage); i++) {
     pageNumbers.push(i);
@@ -22,7 +23,14 @@ export default function Pagination({
           //eslint-disable-next-line
           return (
             <li key={i}>
-              <button onClick={() => handlePagination(num)}>{num}</button>
+              <button
+                style={{
+                  color: currentPage === num ? "red" : "none",
+                }}
+                onClick={() => handlePagination(num)}
+              >
+                {num}
+              </button>
             </li>
           );
         })}
@@ -34,21 +42,16 @@ export default function Pagination({
 
 const PaginationSection = styled.div`
   display: flex;
-  align-items:center;
-  justify-content:center;
-  background-color: grey;
-  padding:.5em 0;
-  /* max-height: 5em; */
+  align-items: center;
+  justify-content: center;
+  /* background-color: grey; */
+  padding: 0.5em 0;
   @media (min-width: 600px) {
-    height:2em;
-    /* width:100%;
-    flex-wrap:wrap; */
-    /* display:block; */
+    height: 2em;
   }
 
   ul {
     display: flex;
-    /* margin:auto; */
     align-items: center;
     justify-content: center;
 

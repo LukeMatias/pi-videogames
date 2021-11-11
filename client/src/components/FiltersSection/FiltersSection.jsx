@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-// import { DivGenres } from "../Create_game/CreateGame";
 import {
   filterByCreated,
   filterByGenres,
@@ -11,19 +10,26 @@ import {
 
 export default function FiltersSection({ setCurrentPage, setOrder }) {
   const genres = useSelector((state) => state.genres);
-  // const [showGenres, setShowGenres] = useState(false);
+  // const games = useSelector((state) => state.games);
+  // const [filters, setFilters] = useState(false);
+  // comprobar si no hay estado para desabilitar los filtros y solo mostrar la pagina de error
   const dispatch = useDispatch();
 
   function handleFilterGenres(e) {
     dispatch(filterByGenres(e.target.value));
+    setCurrentPage(1);
+
   }
   function handleFilterCreated(e) {
     dispatch(filterByCreated(e.target.value));
+    setCurrentPage(1);
+
   }
   function handleSortAlpha(e) {
     dispatch(sortByAlpha(e.target.value));
     setCurrentPage(1);
-    setOrder(e.target.value);
+    setOrder(e.target.value); //Declare this state just for re rendering the component after modification
+    
   }
   function handleSortRating(e) {
     dispatch(sortByRating(e.target.value));
@@ -79,14 +85,16 @@ const FilterBox = styled.div`
   }
 
   @media (min-width: 600px) {
-    background-color: #165168;
+    /* background-color: #165168; */
     flex-direction: column;
     width: min-content;
     justify-content: flex-start;
     padding-top: 32px;
     /* height:100vh; */
     select {
-      margin-bottom: 3em;
+      height:2em;
+      margin-bottom: 6em;
+      font-weight:bold;
     }
   }
 `;

@@ -35,7 +35,7 @@ const FooterDiv = styled.footer`
   margin-top: auto;
   border-top: 1px solid blue;
   height: 2em;
-
+  background-color:#ffffff;
   a {
     margin-right: 0.5em;
   }

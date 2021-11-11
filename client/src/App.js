@@ -2,25 +2,18 @@ import React from "react";
 import { Switch, Route } from "react-router";
 import "./App.css";
 import Landing from "./components/Landing/Landing";
-import Nav from "./components/Nav/Nav";
 import CreateGame from "./components/Create_game/CreateGame";
 import Videogames from "./components/Videogames/Videogames";
 import GameDetail from "./components/game_detail/gameDetail";
-import Footer from "./components/footer/footer";
+import NotFound from "./components/NotFound/NotFound";
 
 export function App() {
   return (
     <div className="App">
-      <Nav />
       <Switch>
         <Route exact path="/" render={() => <Landing />} />
         <Route exact path="/videogames" render={() => <Videogames />} />
         <Route exact path="/videogames/create" render={() => <CreateGame />} />
-        <Route
-          exact
-          path="/videogames?name=name"
-          render={() => <Videogames />}
-        />
         <Route
           path="/videogames/:id"
           render={({ match }) => {
@@ -32,8 +25,8 @@ export function App() {
             return <GameDetail id={id} />;
           }}
         />
+        <Route path="/" render={() => <NotFound />} />
       </Switch>
-      <Footer />
     </div>
   );
 }

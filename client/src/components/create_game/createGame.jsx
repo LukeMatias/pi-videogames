@@ -3,16 +3,19 @@ import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { createGame, getGenres } from "../../redux/actions";
 import { Link } from "react-router-dom";
+import Nav from "../Nav/Nav";
+import Footer from "../footer/footer";
 
 export default function CreateGame() {
   const [errors, setErrors] = useState({});
   const genres = useSelector((state) => state.genres);
-  const gameCreated = useSelector((state) => state.gameCreated);
+  // const gameCreated = useSelector((state) => state.gameCreated);
   const dispatch = useDispatch();
 
   useEffect(() => {
     document.title = "Create - Game";
-    console.log(errors);
+    setErrors(validateInputs(form));
+    // console.log(errors);
     if (genres.length === 0) {
       dispatch(getGenres());
     }
@@ -34,10 +37,9 @@ export default function CreateGame() {
     if (!formData.description.trim())
       errors.Description = "Description is required";
     if (formData.genresGame.length === 0)
-      errors.Genres = "Must select some Genre";
+      errors.Genres = "Must select some Genres";
     if (!formData.released.trim()) errors.Released = "Must select a date";
     if (!formData.rating.trim())
-      // || typeof formData.rating !== "number"
       errors.Rating = "Required and must be a number";
     if (!formData.platforms.trim())
       errors.Platforms = "Must select some Platforms";
@@ -49,6 +51,10 @@ export default function CreateGame() {
       ...form,
       genresGame: [...form.genresGame, e.target.value],
     });
+
+
+
+    
   }
 
   function handleOfSelect(e) {
@@ -56,6 +62,11 @@ export default function CreateGame() {
       ...form,
       genresGame: form.genresGame.filter((g) => g !== e),
     });
+    setErrors(
+      validateInputs({
+        ...form,
+      })
+    );
   }
   function handleChange(e) {
     setForm({
@@ -66,7 +77,7 @@ export default function CreateGame() {
     setErrors(
       validateInputs({
         ...form,
-        [e.target.name]: e.target.value,
+        // [e.target.name]: e.target.value,
       })
     );
   }
@@ -100,6 +111,7 @@ export default function CreateGame() {
   }
   return (
     <BgImg>
+      <Nav />
       <FormLayout>
         <div>
           <h1>Create Game</h1>
@@ -135,7 +147,7 @@ export default function CreateGame() {
             <select onChange={handleSelect}>
               {genres.map((g, i) => {
                 return (
-                  <option key={i} value={g.name}>
+                  <option onClick={handleChange} key={i} value={g.name}>
                     {g.name}
                   </option>
                 );
@@ -200,6 +212,7 @@ export default function CreateGame() {
           </ul> */}
         </FormBox>
       </FormLayout>
+      <Footer />
     </BgImg>
   );
 }

@@ -16,9 +16,9 @@ const SideNav = ({ show, setShow }) => {
         <Link to="/videogames/create" onClick={() => setShow(!show)}>
           Create Game
         </Link>
-        <Link to="acerca" onClick={() => setShow(!show)}>
+        {/* <Link to="acerca" onClick={() => setShow(!show)}>
           Acerca
-        </Link>
+        </Link> */}
       </Menu>
       
       <FooterBar>Videogames-App</FooterBar>

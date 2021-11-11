@@ -1,15 +1,19 @@
 import React from "react";
 import Card from "../Card/Card";
 import styled from "styled-components";
+import NotFound from "../NotFound/NotFound";
 
 export default function Cards({ games }) {
   // console.log(games)
   return (
     <CardsLayout>
-      {/* <h1> Soy el container cards</h1> */}
-      {games?.map((game) => {
-        return <Card game={game} key={game.id} />;
-      })}
+      {Array.isArray(games) ? (
+        games.map((game) => {
+          return <Card game={game} key={game.id} />;
+        })
+      ) : (
+        <NotFound text={games} />
+      )}
     </CardsLayout>
   );
 }

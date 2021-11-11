@@ -6,17 +6,19 @@ import Pagination from "../Pagination/Pagination";
 import FiltersSection from "../FiltersSection/FiltersSection";
 import styled from "styled-components";
 import LoaderBouncer from "../../elements/loaders/loaders";
+import Nav from "../Nav/Nav";
+import Footer from "../footer/footer";
 
 export default function Videogames() {
   const games = useSelector((state) => state.games);
   const genres = useSelector((state) => state.genres);
   const [videogame, setVideogame] = useState("");
-  const [order, setOrder] = useState(""); // eslint-disable-line
   const [currentPage, setCurrentPage] = useState(1);
   const [gamesPerPage] = useState(15);
   const indexLastGame = currentPage * gamesPerPage;
   const indexFirstGame = indexLastGame - gamesPerPage;
   const currentGames = games.slice(indexFirstGame, indexLastGame);
+  const [order, setOrder] = useState(""); // eslint-disable-line
 
   function handlePagination(pageNumber) {
     setCurrentPage(pageNumber);
@@ -45,16 +47,14 @@ export default function Videogames() {
     e.preventDefault();
     dispatch(getGames(videogame));
     console.log(videogame);
-    // setVideogame("");
   }
 
   return (
     <>
       <MainApp>
+      <Nav/>
         <h1>Videogames App</h1>
         <form onSubmit={handleSubmit}>
-          {/* Cambiar el form por un div y hacer el onclick en el button pasando el handle submit
-           */}
           <div>
             <input
               type="text"
@@ -71,17 +71,19 @@ export default function Videogames() {
           gamesPerPage={gamesPerPage}
           allGames={games.length}
           handlePagination={handlePagination}
+          currentPage={currentPage}
         />
         <SectionFiltAndCards>
           <FiltersSection setCurrentPage={setCurrentPage} setOrder={setOrder} />
-          {!games.length ? <LoaderBouncer/>  : <Cards games={currentGames} />}
-          {/* <Cards games={games} /> */}
+          {!games.length ? <LoaderBouncer /> : <Cards games={currentGames} />}
         </SectionFiltAndCards>
         <Pagination
           gamesPerPage={gamesPerPage}
           allGames={games.length}
           handlePagination={handlePagination}
         />
+      <Footer/>
+
       </MainApp>
     </>
   );
@@ -90,10 +92,15 @@ export default function Videogames() {
 // export default Videogames;
 
 const MainApp = styled.main`
+  background: url(/images/joystick.jpg) no-repeat center;
+  background-size: cover;
   display: flex;
   flex-direction: column;
   width: 100%;
   flex-wrap: wrap;
+  h1{
+    color:#ffff;
+  }
 
   form {
     div {
@@ -121,7 +128,7 @@ const MainApp = styled.main`
         input {
           width: 75%;
           height: 25px;
-          margin-bottom:0;
+          margin-bottom: 0;
         }
       }
     }
@@ -129,9 +136,7 @@ const MainApp = styled.main`
 `;
 
 const SectionFiltAndCards = styled.section`
-  /* height: */
   @media (min-width: 600px) {
     display: flex;
-    /* height:100vh; */
   }
 `;
