@@ -8,13 +8,14 @@ import {
   FILTER_BY_CREATED,
   SORT_RATING,
   CLEAN_DETAIL_GAME,
+  FILTER_BY_RATING,
 } from "../actions";
 
 const initialState = {
   games: [],
   toFilterGames: [],
   genres: [],
-  gameCreated: {},
+  gameCreated: undefined,
   detailGame: {},
 };
 
@@ -106,6 +107,13 @@ function rootReducer(state = initialState, action) {
       return {
         ...state,
         detailGame: action.payload,
+      };
+    case FILTER_BY_RATING:
+        let filterRating = state.games;
+        let filtrated = filterRating.filter( g => g.rating > action.payload )    ;
+        return {
+        ...state,
+        games: filtrated,
       };
     default:
       return state;

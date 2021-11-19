@@ -10,14 +10,10 @@ import {
 
 export default function FiltersSection({ setCurrentPage, setOrder }) {
   const genres = useSelector((state) => state.genres);
-  // const games = useSelector((state) => state.games);
-  // const [filters, setFilters] = useState(false);
-  // comprobar si no hay estado para desabilitar los filtros y solo mostrar la pagina de error
   const dispatch = useDispatch();
 
   function handleFilterGenres(e) {
     dispatch(filterByGenres(e.target.value));
-    setCurrentPage(1);
 
   }
   function handleFilterCreated(e) {
@@ -98,53 +94,3 @@ const FilterBox = styled.div`
     }
   }
 `;
-
-// const Genres = styled.div`
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: space-between;
-//   border: 1px solid black;
-//   border-radius: 5px;
-//   padding: 0.5em 2em;
-//   cursor: pointer;
-//   background-color: #fff;
-//   @media (min-width: 600px) {
-//     margin: auto;
-//   }
-// `;
-// const SelectGenres = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   /* justify-content:space-between; */
-//   align-items: flex-start;
-//   margin-bottom: 1em;
-//   position: relative;
-
-/* input,
-  textarea {
-    width: 100%;
-    height: 3.5em;
-  } */
-// `;
-
-/* <SelectGenres>
-        <Genres onClick={() => setShowGenres(!showGenres)}>
-          <p>Genres</p>
-          <p>&gt;&gt;</p>
-        </Genres>
-        <DivGenres showGenres={showGenres}>
-          {genres.map((g, i) => {
-            return (
-              <div key={g.id}>
-                <label key={g.name}>{g.name}</label>
-                <input
-                  key={i}
-                  type="checkbox"
-                  value={g.name}
-                  // onChange={handleCheckBox}
-                />
-              </div>
-            );
-          })}
-        </DivGenres>
-      </SelectGenres> */

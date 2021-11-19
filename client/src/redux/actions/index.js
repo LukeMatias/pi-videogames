@@ -8,6 +8,7 @@ export const SORT_RATING = "SORT_RATING";
 export const SORT_ALPHA = "SORT_ALPHA";
 export const FILTER_BY_GENRE = "FILTER_BY_GENRE";
 export const FILTER_BY_CREATED = "FILTER_BY_CREATED";
+export const FILTER_BY_RATING = "FILTER_BY_RATING";
 
 export function getGames(game) {
   return async function (dispatch) {
@@ -74,6 +75,12 @@ export function filterByCreated(payload) {
   console.log(payload);
   return function (dispatch) {
     dispatch({ type: FILTER_BY_CREATED, payload });
+  };
+}
+export function filterByRating(payload) {
+  console.log(payload);
+  return function (dispatch) {
+    dispatch({ type: FILTER_BY_RATING, payload });
   };
 }
 export function sortByRating(payload) {

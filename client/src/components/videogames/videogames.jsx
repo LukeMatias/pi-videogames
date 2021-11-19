@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getGames, getGenres } from "../../redux/actions";
+import { getGames, getGenres, filterByRating } from "../../redux/actions";
 import Cards from "../Cards/Cards";
 import Pagination from "../Pagination/Pagination";
 import FiltersSection from "../FiltersSection/FiltersSection";
@@ -46,13 +46,14 @@ export default function Videogames() {
   function handleSubmit(e) {
     e.preventDefault();
     dispatch(getGames(videogame));
+    // dispatch(filterByRating(videogame));
     console.log(videogame);
   }
 
   return (
     <>
       <MainApp>
-      <Nav/>
+        <Nav />
         <h1>Videogames App</h1>
         <form onSubmit={handleSubmit}>
           <div>
@@ -82,8 +83,7 @@ export default function Videogames() {
           allGames={games.length}
           handlePagination={handlePagination}
         />
-      <Footer/>
-
+        <Footer />
       </MainApp>
     </>
   );
@@ -98,8 +98,8 @@ const MainApp = styled.main`
   flex-direction: column;
   width: 100%;
   flex-wrap: wrap;
-  h1{
-    color:#ffff;
+  h1 {
+    color: #ffff;
   }
 
   form {

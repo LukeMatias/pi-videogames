@@ -8,9 +8,6 @@ export default function Pagination({
   currentPage,
 }) {
   const pageNumbers = [];
-  // const active = {
-  //   borderBottom :  currentPage === num ? "red" : "none"
-  // }
 
   for (let i = 1; i <= Math.ceil(allGames / gamesPerPage); i++) {
     pageNumbers.push(i);
@@ -38,7 +35,6 @@ export default function Pagination({
     </PaginationSection>
   );
 }
-//eslint-disable-line
 
 const PaginationSection = styled.div`
   display: flex;

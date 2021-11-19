@@ -5,7 +5,6 @@ import SideNav from "../SideBar/SideBar.jsx";
 
 const Toggle = () => {
   const [show, setShow] = useState(false);
-  // const showNav = () => setShow(!show);
 
   return (
     <>
