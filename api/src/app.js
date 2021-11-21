@@ -1,23 +1,23 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
-// const bodyParser = require('body-parser');
 const morgan = require("morgan");
 const routes = require("./routes/index.js");
  require("./db.js");
+ const cors = require("cors")
 // Servidor
 const server = express();
-// Api KEY
-// bc1d837b88814a1aa7d25aa7f9538ac6
+
 
 server.name = "API";
 // body parser its deprecated
+// Middlewares
+server.use(cors())
 server.use(express.urlencoded({ extended: true, limit: '50mb' }));
 server.use(express.json({ limit: '50mb' }));
-// Middlewares
 server.use(cookieParser());
 server.use(morgan("dev"));
 server.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");  // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Origin", "*");  // update to match the domain you will make the request from
   res.header("Access-Control-Allow-Credentials", "true");
   res.header(
     "Access-Control-Allow-Headers",

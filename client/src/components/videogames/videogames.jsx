@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getGames, getGenres, filterByRating } from "../../redux/actions";
+import { getGames, getGenres } from "../../redux/actions";
 import Cards from "../Cards/Cards";
 import Pagination from "../Pagination/Pagination";
 import FiltersSection from "../FiltersSection/FiltersSection";
