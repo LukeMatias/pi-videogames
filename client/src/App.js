@@ -2,8 +2,8 @@ import React from "react";
 import { Switch, Route } from "react-router";
 import "./App.css";
 import Landing from "./components/Landing/Landing";
-import CreateGame from "./components/Create_game/CreateGame";
 import Videogames from "./components/Videogames/Videogames";
+import CreateGame from "./components/Create_game/CreateGame";
 import GameDetail from "./components/game_detail/gameDetail";
 import NotFound from "./components/NotFound/NotFound";
 
