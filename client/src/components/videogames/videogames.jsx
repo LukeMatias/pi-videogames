@@ -4,10 +4,11 @@ import { getGames, getGenres } from "../../redux/actions";
 import Cards from "../Cards/Cards";
 import Pagination from "../Pagination/Pagination";
 import FiltersSection from "../FiltersSection/FiltersSection";
-import styled from "styled-components";
 import LoaderBouncer from "../../elements/loaders/loaders";
 import Nav from "../Nav/Nav";
 import Footer from "../footer/footer";
+import { MainApp, SectionFiltAndCards } from "./VideogamesEleents";
+
 
 export default function Videogames() {
   const games = useSelector((state) => state.games);
@@ -63,8 +64,7 @@ export default function Videogames() {
               value={videogame}
               autoFocus={true}
               onChange={handleInputSearch}
-              placeholder="Search game ..."
-            />
+              placeholder="Search game ..." />
             <button type="submit">Search</button>
           </div>
         </form>
@@ -72,8 +72,7 @@ export default function Videogames() {
           gamesPerPage={gamesPerPage}
           allGames={games.length}
           handlePagination={handlePagination}
-          currentPage={currentPage}
-        />
+          currentPage={currentPage} />
         <SectionFiltAndCards>
           <FiltersSection setCurrentPage={setCurrentPage} setOrder={setOrder} />
           {!games.length ? <LoaderBouncer /> : <Cards games={currentGames} />}
@@ -81,62 +80,9 @@ export default function Videogames() {
         <Pagination
           gamesPerPage={gamesPerPage}
           allGames={games.length}
-          handlePagination={handlePagination}
-        />
+          handlePagination={handlePagination} />
         <Footer />
       </MainApp>
     </>
   );
 }
-
-// export default Videogames;
-
-const MainApp = styled.main`
-  background: url(/images/joystick.jpg) no-repeat center;
-  background-size: cover;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  flex-wrap: wrap;
-  h1 {
-    color: #ffff;
-  }
-
-  form {
-    div {
-      margin: 1em;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      input {
-        width: 100%;
-        height: 25px;
-        margin-bottom: 0.5em;
-      }
-      button {
-        cursor: pointer;
-        padding: 0.5em 1em;
-      }
-    }
-  }
-
-  @media (min-width: 600px) {
-    form {
-      div {
-        flex-direction: row;
-        align-items: center;
-        input {
-          width: 75%;
-          height: 25px;
-          margin-bottom: 0;
-        }
-      }
-    }
-  }
-`;
-
-const SectionFiltAndCards = styled.section`
-  @media (min-width: 600px) {
-    display: flex;
-  }
-`;
