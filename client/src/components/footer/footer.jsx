@@ -34,7 +34,7 @@ const FooterDiv = styled.footer`
   padding: 1em;
   margin-top: auto;
   border-top: 1px solid blue;
-  height: 2em;
+  max-height: 2em;
   background-color:#ffffff;
   a {
     margin-right: 0.5em;

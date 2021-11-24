@@ -49,5 +49,9 @@ export const MainApp = styled.main`
 export const SectionFiltAndCards = styled.section`
   @media (min-width: 600px) {
     display: flex;
+    flex-direction:row;
+    justify-content:center;
+    min-height:90vh;
+    margin:2em 0 ;
   }
 `;

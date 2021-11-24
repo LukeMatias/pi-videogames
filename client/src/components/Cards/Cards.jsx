@@ -21,9 +21,11 @@ export default function Cards({ games }) {
 const CardsLayout = styled.div`
   /* border:1px solid black; */
   display: flex;
+  justify-content:center;
   flex-wrap: wrap;
-  padding: 1em;
+  gap:2em;
   @media (min-width: 600px) {
-    width: calc(85% - 16px);
+    width: calc(85% - 32px);
+    /* justify-content:flex-start; */
   }
 `;

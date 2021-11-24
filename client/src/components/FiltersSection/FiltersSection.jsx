@@ -71,22 +71,19 @@ const FilterBox = styled.div`
   flex-direction: row;
   justify-content: space-around;
   flex-wrap: wrap;
+  margin-bottom:1em;
   padding: 0 1em;
-
+  
   select {
     cursor: pointer;
-    option:hover {
-      cursor: pointer;
-    }
+    margin:1em 0;
+    
   }
 
   @media (min-width: 600px) {
-    /* background-color: #165168; */
     flex-direction: column;
-    width: min-content;
     justify-content: flex-start;
     padding-top: 32px;
-    /* height:100vh; */
     select {
       height:2em;
       margin-bottom: 6em;
