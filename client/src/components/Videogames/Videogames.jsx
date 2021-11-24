@@ -7,7 +7,7 @@ import FiltersSection from "../FiltersSection/FiltersSection";
 import LoaderBouncer from "../../elements/loaders/loaders";
 import Nav from "../Nav/Nav";
 import Footer from "../footer/footer";
-import { MainApp, SectionFiltAndCards } from "./VideogamesEleents";
+import { MainApp, SectionFiltAndCards } from "./VideogamesElements";
 
 
 export default function Videogames() {
