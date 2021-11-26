@@ -64,7 +64,7 @@ export default function GameDetail({ id }) {
 const Container = styled.main`
   display: flex;
   flex-direction: column;
-  background: url(/images/bg-detail.jpg) no-repeat center;
+  background: url(/images/bg-detail-2.jpg) no-repeat center;
   background-size: cover;
   height: 100vh;
 `;
